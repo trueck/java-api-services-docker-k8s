@@ -17,3 +17,8 @@ logging:
   level:
     root: INFO
     se.magnus: DEBUG
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
