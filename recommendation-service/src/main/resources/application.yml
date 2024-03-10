@@ -5,3 +5,8 @@ logging:
   level:
     root: INFO
     se.magnus: DEBUG
+
+spring.data.mongodb:
+  host: localhost
+  port: 27017
+  database: recommendation-db
