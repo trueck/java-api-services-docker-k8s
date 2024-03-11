@@ -3,7 +3,7 @@ server.error.include-message: always
 logging:
   level:
     root: INFO
-    se.magnus.microservices: DEBUG
+    com.example: DEBUG
 
 spring.data.mongodb:
   host: localhost

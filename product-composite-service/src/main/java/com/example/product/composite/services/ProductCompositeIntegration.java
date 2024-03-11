@@ -65,23 +65,31 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
         this.webClient = webClient.build();
         this.mapper = mapper;
 
-        productServiceUrl        = "http://" + productServiceHost + ":" + productServicePort;
-        recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort;
-        reviewServiceUrl         = "http://" + reviewServiceHost + ":" + reviewServicePort;
+        productServiceUrl        = "http://" + productServiceHost + ":" + productServicePort + "/product";
+        recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
+        reviewServiceUrl         = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
     }
 
     @Override
     public Mono<Product> createProduct(Product body) {
+        try {
             String url = productServiceUrl;
-            LOG.debug("Will post a new product to URL: {}", url);
-            return webClient.post().uri(url).retrieve().bodyToMono(Product.class)
-                    .log()
-                    .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
+            LOG.info("Will post a new product to URL: {}", url);
+
+            Product product = restTemplate.postForObject(url, body, Product.class);
+            LOG.info("Created a product with id: {}", product.getProductId());
+
+            return Mono.just(product);
+
+        } catch (HttpClientErrorException ex) {
+            LOG.error("got error when calling product service to create product with body {}", body, ex);
+            throw handleHttpClientException(ex);
+        }
     }
 
     @Override
     public Mono<Product> getProduct(int productId) {
-        String url = productServiceUrl + "/product/" + productId;
+        String url = productServiceUrl + "/" + productId;
         LOG.debug("Will call the getProduct API on URL: {}", url);
 
         return webClient.get().uri(url).retrieve().bodyToMono(Product.class).log().onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
@@ -104,18 +112,24 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Mono<Recommendation> createRecommendation(Recommendation body) {
 
+        try {
             String url = recommendationServiceUrl;
+            LOG.debug("Will post a new recommendation to URL: {}", url);
 
-            LOG.debug("Will post a new product to URL: {}", url);
-            return webClient.post().uri(url).retrieve().bodyToMono(Recommendation.class)
-                    .log()
-                    .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
+            Recommendation recommendation = restTemplate.postForObject(url, body, Recommendation.class);
+            LOG.debug("Created a recommendation with id: {}", recommendation.getProductId());
+
+            return Mono.just(recommendation);
+
+        } catch (HttpClientErrorException ex) {
+            throw handleHttpClientException(ex);
+        }
     }
 
     @Override
     public Flux<Recommendation> getRecommendations(int productId) {
 
-        String url = recommendationServiceUrl + "/recommendation?productId=" + productId;
+        String url = recommendationServiceUrl + "?productId=" + productId;
 
         LOG.debug("Will call the getRecommendations API on URL: {}", url);
 
@@ -155,7 +169,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     @Override
     public Flux<Review> getReviews(int productId) {
 
-        String url = reviewServiceUrl + "/review?productId=" + productId;
+        String url = reviewServiceUrl + "?productId=" + productId;
 
         LOG.debug("Will call the getReviews API on URL: {}", url);
 

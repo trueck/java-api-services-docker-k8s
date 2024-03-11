@@ -55,7 +55,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
             LOG.debug("createCompositeProduct: composite entities created for productId: {}", body.getProductId());
 
         } catch (RuntimeException re) {
-            LOG.warn("createCompositeProduct failed: {}", re.toString());
+            LOG.warn("createCompositeProduct failed.", re);
             throw re;
         }
     }
