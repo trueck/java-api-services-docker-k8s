@@ -36,12 +36,12 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
             LOG.debug("createCompositeProduct: creates a new composite entity for productId: {}", body.getProductId());
 
             Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
-            integration.createProduct(product);
+            integration.createProduct(product).block();
 
             if (body.getRecommendations() != null) {
                 body.getRecommendations().forEach(r -> {
                     Recommendation recommendation = new Recommendation(body.getProductId(), r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent(), null);
-                    integration.createRecommendation(recommendation);
+                    integration.createRecommendation(recommendation).block();
                 });
             }
 
@@ -78,8 +78,8 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
             LOG.debug("deleteCompositeProduct: Deletes a product aggregate for productId: {}", productId);
 
-            integration.deleteProduct(productId);
-            integration.deleteRecommendations(productId);
+            integration.deleteProduct(productId).block();
+            integration.deleteRecommendations(productId).block();
             integration.deleteReviews(productId);
 
             LOG.debug("deleteCompositeProduct: aggregate entities deleted for productId: {}", productId);

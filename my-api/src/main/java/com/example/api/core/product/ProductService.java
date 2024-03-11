@@ -30,15 +30,15 @@ public interface ProductService {
             value    = "/product",
             consumes = "application/json",
             produces = "application/json")
-    Product createProduct(@RequestBody Product body);
+    Mono<Product> createProduct(@RequestBody Product body);
 
     /**
      * Sample usage:
-     *
+     * <p>
      * curl -X DELETE $HOST:$PORT/product/1
      *
      * @param productId
      */
     @DeleteMapping(value = "/product/{productId}")
-    void deleteProduct(@PathVariable int productId);
+    Mono<Void> deleteProduct(@PathVariable int productId);
 }

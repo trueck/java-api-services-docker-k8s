@@ -14,15 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static reactor.core.publisher.Mono.just;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest(webEnvironment=RANDOM_PORT, properties = {"spring.data.mongodb.port: 0"})
-
 public class ProductServiceApplicationTests {
 
 	@Autowired
@@ -33,7 +31,7 @@ public class ProductServiceApplicationTests {
 
 	@BeforeEach
 	public void setupDb() {
-		repository.deleteAll();
+		repository.deleteAll().block();
 	}
 
 
@@ -42,9 +40,13 @@ public class ProductServiceApplicationTests {
 
 		int productId = 1;
 
+		assertNull(repository.findByProductId(productId).block());
+		assertEquals(0, (long)repository.count().block());
+
 		postAndVerifyProduct(productId, OK);
 
-		assertTrue(repository.findByProductId(productId).isPresent());
+		assertNotNull(repository.findByProductId(productId).block());
+		assertEquals(1, (long)repository.count().block());
 
 		getAndVerifyProduct(productId, OK)
 				.jsonPath("$.productId").isEqualTo(productId);
@@ -57,11 +59,12 @@ public class ProductServiceApplicationTests {
 
 		postAndVerifyProduct(productId, OK);
 
-		assertTrue(repository.findByProductId(productId).isPresent());
+		assertNotNull(repository.findByProductId(productId).block());
 
 		postAndVerifyProduct(productId, UNPROCESSABLE_ENTITY)
 				.jsonPath("$.path").isEqualTo("/product")
 				.jsonPath("$.message").isEqualTo("Duplicate key, Product Id: " + productId);
+
 	}
 
 	@Test
@@ -70,12 +73,14 @@ public class ProductServiceApplicationTests {
 		int productId = 1;
 
 		postAndVerifyProduct(productId, OK);
-		assertTrue(repository.findByProductId(productId).isPresent());
+		assertNotNull(repository.findByProductId(productId).block());
 
 		deleteAndVerifyProduct(productId, OK);
-		assertFalse(repository.findByProductId(productId).isPresent());
+
+		assertNull(repository.findByProductId(productId).block());
 
 		deleteAndVerifyProduct(productId, OK);
+
 	}
 
 	@Test
@@ -87,8 +92,6 @@ public class ProductServiceApplicationTests {
 
 	@Test
 	public void getProductNotFound() {
-
-
 		int productIdNotFound = 13;
 		getAndVerifyProduct(productIdNotFound, NOT_FOUND)
 				.jsonPath("$.path").isEqualTo("/product/" + productIdNotFound)
@@ -97,7 +100,6 @@ public class ProductServiceApplicationTests {
 
 	@Test
 	public void getProductInvalidParameterNegativeValue() {
-
 		int productIdInvalid = -1;
 
 		getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_ENTITY)

@@ -2,6 +2,7 @@ package com.example.api.core.recommendation;
 
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface RecommendationService {
             value    = "/recommendation",
             consumes = "application/json",
             produces = "application/json")
-    Recommendation createRecommendation(@RequestBody Recommendation body);
+    Mono<Recommendation> createRecommendation(@RequestBody Recommendation body);
 
     /**
      * Sample usage:
@@ -42,5 +43,5 @@ public interface RecommendationService {
      * @param productId
      */
     @DeleteMapping(value = "/recommendation")
-    void deleteRecommendations(@RequestParam(value = "productId", required = true)  int productId);
+    Mono<Void> deleteRecommendations(@RequestParam(value = "productId", required = true)  int productId);
 }

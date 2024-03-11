@@ -12,6 +12,7 @@ import com.example.util.exceptions.NotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.internal.matchers.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +23,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static java.util.Collections.singletonList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
@@ -57,6 +59,17 @@ public class ProductCompositeServiceApplicationTests {
 		when(compositeIntegration.getProduct(PRODUCT_ID_NOT_FOUND)).thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
 
 		when(compositeIntegration.getProduct(PRODUCT_ID_INVALID)).thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
+
+		when(compositeIntegration.createProduct(any())).
+				thenReturn(just(new Product(PRODUCT_ID_OK, "name", 1, "mock-address")));
+
+		when(compositeIntegration.createRecommendation(any())).
+				thenReturn(just(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")));
+
+
+
+
+
 	}
 
 	@Test
@@ -82,6 +95,10 @@ public class ProductCompositeServiceApplicationTests {
 
 	@Test
 	public void deleteCompositeProduct() {
+		when(compositeIntegration.deleteProduct(anyInt())).
+				thenReturn(Mono.empty());
+		when(compositeIntegration.deleteRecommendations(anyInt())).
+				thenReturn(Mono.empty());
 		ProductAggregate compositeProduct = new ProductAggregate(1, "name", 1,
 				singletonList(new RecommendationSummary(1, "a", 1, "c")),
 				singletonList(new ReviewSummary(1, "a", "s", "c")), null);

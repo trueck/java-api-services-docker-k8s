@@ -71,20 +71,12 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }
 
     @Override
-    public Product createProduct(Product body) {
-
-        try {
+    public Mono<Product> createProduct(Product body) {
             String url = productServiceUrl;
             LOG.debug("Will post a new product to URL: {}", url);
-
-            Product product = restTemplate.postForObject(url, body, Product.class);
-            LOG.debug("Created a product with id: {}", product.getProductId());
-
-            return product;
-
-        } catch (HttpClientErrorException ex) {
-            throw handleHttpClientException(ex);
-        }
+            return webClient.post().uri(url).retrieve().bodyToMono(Product.class)
+                    .log()
+                    .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
     }
 
     @Override
@@ -96,32 +88,28 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }
 
     @Override
-    public void deleteProduct(int productId) {
+    public Mono<Void> deleteProduct(int productId) {
         try {
             String url = productServiceUrl + "/" + productId;
             LOG.debug("Will call the deleteProduct API on URL: {}", url);
 
             restTemplate.delete(url);
-
+            return Mono.empty();
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
+
     }
 
     @Override
-    public Recommendation createRecommendation(Recommendation body) {
-        try {
+    public Mono<Recommendation> createRecommendation(Recommendation body) {
+
             String url = recommendationServiceUrl;
-            LOG.debug("Will post a new recommendation to URL: {}", url);
 
-            Recommendation recommendation = restTemplate.postForObject(url, body, Recommendation.class);
-            LOG.debug("Created a recommendation with id: {}", recommendation.getProductId());
-
-            return recommendation;
-
-        } catch (HttpClientErrorException ex) {
-            throw handleHttpClientException(ex);
-        }
+            LOG.debug("Will post a new product to URL: {}", url);
+            return webClient.post().uri(url).retrieve().bodyToMono(Recommendation.class)
+                    .log()
+                    .onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
     }
 
     @Override
@@ -136,13 +124,13 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }
 
     @Override
-    public void deleteRecommendations(int productId) {
+    public Mono<Void> deleteRecommendations(int productId) {
         try {
             String url = recommendationServiceUrl + "?productId=" + productId;
             LOG.debug("Will call the deleteRecommendations API on URL: {}", url);
 
             restTemplate.delete(url);
-
+            return Mono.empty();
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

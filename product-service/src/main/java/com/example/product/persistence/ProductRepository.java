@@ -1,10 +1,8 @@
 package com.example.product.persistence;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.Optional;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Mono;
 
-public interface ProductRepository extends MongoRepository<ProductEntity, String> {
-    Optional<ProductEntity> findByProductId(int productId);
+public interface ProductRepository extends ReactiveCrudRepository<ProductEntity, String> {
+    Mono<ProductEntity> findByProductId(int productId);
 }

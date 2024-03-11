@@ -2,12 +2,13 @@ package com.example.review;
 
 import com.example.review.persistence.ReviewEntity;
 import com.example.review.persistence.ReviewRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
-@RunWith(SpringRunner.class)
+
 @DataJpaTest
 @Transactional(propagation = NOT_SUPPORTED)
 public class PersistenceTests {
@@ -28,7 +29,7 @@ public class PersistenceTests {
 
     private ReviewEntity savedEntity;
 
-    @Before
+    @BeforeEach
     public void setupDb() {
         repository.deleteAll();
 
@@ -71,14 +72,17 @@ public class PersistenceTests {
     public void getByProductId() {
         List<ReviewEntity> entityList = repository.findByProductId(savedEntity.getProductId());
 
-        assertThat(entityList, hasSize(1));
+        MatcherAssert.assertThat(entityList, hasSize(1));
         assertEqualsReview(savedEntity, entityList.get(0));
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test()
     public void duplicateError() {
-        ReviewEntity entity = new ReviewEntity(1, 2, "a", "s", "c");
-        repository.save(entity);
+        assertThrows(DataIntegrityViolationException.class,
+                ()->{
+                    ReviewEntity entity = new ReviewEntity(1, 2, "a", "s", "c");
+                    repository.save(entity);
+                });
     }
 
     @Test

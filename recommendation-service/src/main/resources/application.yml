@@ -10,3 +10,6 @@ spring.data.mongodb:
   host: localhost
   port: 27017
   database: recommendation-db
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
