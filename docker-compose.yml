@@ -35,7 +35,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
   # $ mongo
   mongodb:
-    image: mongo:latest
+    image: mongo
     mem_limit: 350m
     ports:
       - "27017:27017"
@@ -43,8 +43,8 @@ services:
 
   # $ mysql -uroot -h127.0.0.1 -p
   mysql:
-    image: mysql:latest
-    mem_limit: 350m
+    image: mysql
+    mem_limit: 650m
     ports:
       - "3306:3306"
     environment:
