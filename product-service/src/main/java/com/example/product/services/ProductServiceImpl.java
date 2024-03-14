@@ -22,18 +22,14 @@ public class ProductServiceImpl implements ProductService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-    private final ServiceUtil serviceUtil;
-
-    private final ProductRepository repository;
-
-    private final ProductMapper mapper;
+    @Autowired
+    private ServiceUtil serviceUtil;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository repository, ProductMapper mapper, ServiceUtil serviceUtil) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.serviceUtil = serviceUtil;
-    }
+    private ProductRepository repository;
+
+    @Autowired
+    private ProductMapper mapper;
 
     @Override
     public Mono<Product> getProduct(int productId) {

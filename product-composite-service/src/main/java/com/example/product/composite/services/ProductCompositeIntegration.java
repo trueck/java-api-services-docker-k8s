@@ -33,10 +33,6 @@ import static reactor.core.publisher.Flux.empty;
 public class ProductCompositeIntegration implements ProductService, RecommendationService, ReviewService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
-
-    public static String OUTPUT_PRODUCTS = "output-products";
-    public static String OUTPUT_RECOMMENDATIONS = "output-recommendations";
-    public static String OUTPUT_REVIEWS = "output-reviews";
     private final RestTemplate restTemplate;
     private final WebClient webClient;
     private final ObjectMapper mapper;

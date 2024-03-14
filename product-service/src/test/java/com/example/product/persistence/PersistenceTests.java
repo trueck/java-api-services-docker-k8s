@@ -1,29 +1,23 @@
 package com.example.product.persistence;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+import com.example.product.services.ReservationService;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import reactor.test.StepVerifier;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static java.util.stream.IntStream.rangeClosed;
-import static org.junit.Assert.*;
-import static org.springframework.data.domain.Sort.Direction.ASC;
 
 
 @DataMongoTest
-@ExtendWith(SpringExtension.class)
+@RunWith(SpringRunner.class)
 public class PersistenceTests {
 
     @Autowired
@@ -31,7 +25,10 @@ public class PersistenceTests {
 
     private ProductEntity savedEntity;
 
-    @BeforeEach
+    @MockBean
+    private ReservationService reservationService;
+
+    @Before
     public void setupDb() {
         StepVerifier.create(repository.deleteAll()).verifyComplete();
 
