@@ -18,7 +18,7 @@ public class ReservationService {
 
     public Flux<Reservation> getNames(){
         return webClient.get()
-                .uri("http://localhost:8080/names")
+                .uri("http://localhost:8888/names")
                 .retrieve()
                 .bodyToFlux(Reservation.class);
     }

@@ -16,7 +16,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest
-@AutoConfigureWireMock
+@AutoConfigureWireMock(port=8888)
 public class WebClientTest {
 
     @Autowired
