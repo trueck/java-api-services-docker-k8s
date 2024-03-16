@@ -3,6 +3,7 @@ package com.example.product;
 import com.example.product.persistence.ProductEntity;
 import com.example.product.persistence.Reservation;
 import com.example.product.persistence.ReservationRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,14 @@ import reactor.core.publisher.Flux;
 
 
 @Component
+@RequiredArgsConstructor
 public class SampleDataInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(SampleDataInitializer.class);
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private ReactiveMongoOperations mongoTemplate;
+
+    private final ReservationRepository reservationRepository;
+
+    private final ReactiveMongoOperations mongoTemplate;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initData(){

@@ -3,6 +3,7 @@ package com.example.product.services;
 import com.example.product.persistence.ProductEntity;
 import com.example.product.persistence.ProductRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,16 @@ import reactor.core.publisher.Mono;
 import static reactor.core.publisher.Mono.error;
 
 @RestController
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-    @Autowired
-    private ServiceUtil serviceUtil;
+    private final ServiceUtil serviceUtil;
 
-    @Autowired
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
-    @Autowired
-    private ProductMapper mapper;
+    private final ProductMapper mapper;
 
     @Override
     public Mono<Product> getProduct(int productId) {
