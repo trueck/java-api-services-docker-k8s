@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: rec
-        image: test-microservices-recommendation:latest
+        image: java-api-services-docker-k8s-recommendation:latest
         imagePullPolicy: Never
         env:
           - name: SPRING_PROFILES_ACTIVE

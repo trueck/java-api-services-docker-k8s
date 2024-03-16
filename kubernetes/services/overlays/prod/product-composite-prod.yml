@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: comp
-        image: hands-on/product-composite-service:v1
+        image: java-api-services-docker-k8s-product-composite:v1
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: "docker,prod"

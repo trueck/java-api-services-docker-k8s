@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
-    <artifactId>test-microservices</artifactId>
+    <artifactId>java-api-services-docker-k8s</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>test-microservices</name>
+    <name>java-api-services-docker-k8s</name>
     <packaging>pom</packaging>
 
     <parent>
@@ -17,8 +17,8 @@
     </parent>
 
     <modules>
-        <module>my-api</module>
-        <module>my-util</module>
+        <module>common-api</module>
+        <module>common-util</module>
         <module>product-service</module>
         <module>review-service</module>
         <module>recommendation-service</module>

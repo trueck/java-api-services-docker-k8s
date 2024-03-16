@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: rec
-        image: hands-on/recommendation-service:v1
+        image: java-api-services-docker-k8s-recommendation:v1
         env:
           - name: SPRING_PROFILES_ACTIVE
             value: "docker,prod"
