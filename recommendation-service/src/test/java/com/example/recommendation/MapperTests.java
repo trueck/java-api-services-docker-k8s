@@ -24,20 +24,20 @@ public class MapperTests {
 
         RecommendationEntity entity = mapper.apiToEntity(api);
 
-        assertEquals(api.getProductId(), entity.getProductId());
-        assertEquals(api.getRecommendationId(), entity.getRecommendationId());
-        assertEquals(api.getAuthor(), entity.getAuthor());
-        assertEquals(api.getRate(), entity.getRating());
-        assertEquals(api.getContent(), entity.getContent());
+        assertEquals(api.productId(), entity.productId());
+        assertEquals(api.recommendationId(), entity.recommendationId());
+        assertEquals(api.author(), entity.author());
+        assertEquals(api.rate(), entity.rating());
+        assertEquals(api.content(), entity.content());
 
         Recommendation api2 = mapper.entityToApi(entity);
 
-        assertEquals(api.getProductId(), api2.getProductId());
-        assertEquals(api.getRecommendationId(), api2.getRecommendationId());
-        assertEquals(api.getAuthor(), api2.getAuthor());
-        assertEquals(api.getRate(), api2.getRate());
-        assertEquals(api.getContent(), api2.getContent());
-        assertNull(api2.getServiceAddress());
+        assertEquals(api.productId(), api2.productId());
+        assertEquals(api.recommendationId(), api2.recommendationId());
+        assertEquals(api.author(), api2.author());
+        assertEquals(api.rate(), api2.rate());
+        assertEquals(api.content(), api2.content());
+        assertNull(api2.serviceAddress());
     }
 
     @Test
@@ -53,22 +53,22 @@ public class MapperTests {
 
         RecommendationEntity entity = entityList.get(0);
 
-        assertEquals(api.getProductId(), entity.getProductId());
-        assertEquals(api.getRecommendationId(), entity.getRecommendationId());
-        assertEquals(api.getAuthor(), entity.getAuthor());
-        assertEquals(api.getRate(), entity.getRating());
-        assertEquals(api.getContent(), entity.getContent());
+        assertEquals(api.productId(), entity.productId());
+        assertEquals(api.recommendationId(), entity.recommendationId());
+        assertEquals(api.author(), entity.author());
+        assertEquals(api.rate(), entity.rating());
+        assertEquals(api.content(), entity.content());
 
         List<Recommendation> api2List = mapper.entityListToApiList(entityList);
         assertEquals(apiList.size(), api2List.size());
 
         Recommendation api2 = api2List.get(0);
 
-        assertEquals(api.getProductId(), api2.getProductId());
-        assertEquals(api.getRecommendationId(), api2.getRecommendationId());
-        assertEquals(api.getAuthor(), api2.getAuthor());
-        assertEquals(api.getRate(), api2.getRate());
-        assertEquals(api.getContent(), api2.getContent());
-        assertNull(api2.getServiceAddress());
+        assertEquals(api.productId(), api2.productId());
+        assertEquals(api.recommendationId(), api2.recommendationId());
+        assertEquals(api.author(), api2.author());
+        assertEquals(api.rate(), api2.rate());
+        assertEquals(api.content(), api2.content());
+        assertNull(api2.serviceAddress());
     }
 }

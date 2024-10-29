@@ -73,7 +73,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
             LOG.info("Will post a new product to URL: {}", url);
 
             Product product = restTemplate.postForObject(url, body, Product.class);
-            LOG.info("Created a product with id: {}", product.getProductId());
+            LOG.info("Created a product with id: {}", product.productId());
 
             return Mono.just(product);
 
@@ -113,7 +113,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
             LOG.debug("Will post a new recommendation to URL: {}", url);
 
             Recommendation recommendation = restTemplate.postForObject(url, body, Recommendation.class);
-            LOG.debug("Created a recommendation with id: {}", recommendation.getProductId());
+            LOG.debug("Created a recommendation with id: {}", recommendation.productId());
 
             return Mono.just(recommendation);
 
@@ -153,7 +153,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
             LOG.debug("Will post a new review to URL: {}", url);
 
             Review review = restTemplate.postForObject(url, body, Review.class);
-            LOG.debug("Created a review with id: {}", review.getProductId());
+            LOG.debug("Created a review with id: {}", review.productId());
 
             return review;
 

@@ -3,6 +3,7 @@ package com.example.product.persistence;
 
 import com.example.api.core.product.Product;
 import com.example.product.services.ProductMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -21,17 +22,17 @@ public class MapperTests {
 
         ProductEntity entity = mapper.apiToEntity(api);
 
-        assertEquals(api.getProductId(), entity.getProductId());
-        assertEquals(api.getProductId(), entity.getProductId());
-        assertEquals(api.getName(), entity.getName());
-        assertEquals(api.getWeight(), entity.getWeight());
+        Assertions.assertEquals(api.productId(), entity.productId());
+        Assertions.assertEquals(api.productId(), entity.productId());
+        Assertions.assertEquals(api.name(), entity.name());
+        Assertions.assertEquals(api.weight(), entity.weight());
 
         Product api2 = mapper.entityToApi(entity);
 
-        assertEquals(api.getProductId(), api2.getProductId());
-        assertEquals(api.getProductId(), api2.getProductId());
-        assertEquals(api.getName(),      api2.getName());
-        assertEquals(api.getWeight(),    api2.getWeight());
-        assertNull(api2.getServiceAddress());
+        Assertions.assertEquals(api.productId(), api2.productId());
+        Assertions.assertEquals(api.productId(), api2.productId());
+        Assertions.assertEquals(api.name(), api2.name());
+        Assertions.assertEquals(api.weight(), api2.weight());
+        Assertions.assertNull(api2.serviceAddress());
     }
 }

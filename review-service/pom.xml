@@ -8,14 +8,11 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-
 	<artifactId>review-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>review-service</name>
 	<description>Demo project for Spring Boot</description>
-	<properties>
 
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,9 +60,6 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
-
 	</dependencies>
 
 	<build>
@@ -76,6 +70,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>

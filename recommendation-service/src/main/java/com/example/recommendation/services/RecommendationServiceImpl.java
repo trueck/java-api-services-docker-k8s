@@ -6,17 +6,16 @@ import com.example.recommendation.persistence.RecommendationEntity;
 import com.example.recommendation.persistence.RecommendationRepository;
 import com.example.util.exceptions.InvalidInputException;
 import com.example.util.http.ServiceUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @RestController
+@RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceImpl.class);
@@ -27,23 +26,17 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private final ServiceUtil serviceUtil;
 
-    @Autowired
-    public RecommendationServiceImpl(RecommendationRepository repository, RecommendationMapper mapper, ServiceUtil serviceUtil) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.serviceUtil = serviceUtil;
-    }
 
     @Override
     public Mono<Recommendation> createRecommendation(Recommendation body) {
-        if (body.getProductId() < 1) throw new InvalidInputException("Invalid productId: " + body.getProductId());
+        if (body.productId() < 1) throw new InvalidInputException("Invalid productId: " + body.productId());
 
         RecommendationEntity entity = mapper.apiToEntity(body);
         Mono<Recommendation> newEntity = repository.save(entity)
                 .log()
                 .onErrorMap(
                         DuplicateKeyException.class,
-                        ex -> new InvalidInputException("Duplicate key, Product Id: " + body.getProductId() + ", Recommendation Id:" + body.getRecommendationId()))
+                        ex -> new InvalidInputException("Duplicate key, Product Id: " + body.productId() + ", Recommendation Id:" + body.recommendationId()))
                 .map(e -> mapper.entityToApi(e));
 
         return newEntity;
@@ -57,7 +50,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         return repository.findByProductId(productId)
                 .log()
                 .map(e -> mapper.entityToApi(e))
-                .map(e -> {e.setServiceAddress(serviceUtil.getServiceAddress()); return e;});
+                .map(e -> new Recommendation(e.productId(), e.recommendationId(), e.author(), e.rate(), e.content(), serviceUtil.getServiceAddress()));
     }
 
     @Override

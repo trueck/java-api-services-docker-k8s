@@ -43,7 +43,7 @@ public class ReservationEntityTest {
                 .verifyComplete();
 
         StepVerifier.create(saved)
-                .expectNextMatches(e -> e.getName().equals("Edwin") && e.getId() != null)
+                .expectNextMatches(e -> e.name().equals("Edwin") && e.id() != null)
                 .verifyComplete();
     }
 }
