@@ -40,7 +40,7 @@ public class WebClientTest {
         Flux<Reservation> reservations = reservationService.getNames();
 
         StepVerifier.create(reservations)
-                .expectNextMatches(e -> e.getId() != null && e.getName().equals("Edwin"))
+                .expectNextMatches(e -> e.id() != null && e.name().equals("Edwin"))
                 .verifyComplete();
     }
 }

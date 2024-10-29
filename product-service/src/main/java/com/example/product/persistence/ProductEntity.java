@@ -10,28 +10,20 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="products")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductEntity {
+public record ProductEntity (
 
     @Id
-    private String id;
+     String id,
 
     @Version
-    private Integer version;
+     Integer version,
 
     @Indexed(unique = true)
-    private int productId;
+     int productId,
 
-    private String name;
-    private int weight;
+     String name,
+     int weight){
 
 
-    public ProductEntity(int productId, String name, int weight) {
-        this.productId = productId;
-        this.name = name;
-        this.weight = weight;
-    }
 
 }

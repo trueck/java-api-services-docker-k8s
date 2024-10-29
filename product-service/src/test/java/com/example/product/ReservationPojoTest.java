@@ -14,11 +14,11 @@ public class ReservationPojoTest {
     @Test
     public void create(){
         Reservation reservation = new Reservation("1", "Edwin");
-        assertEquals("1", reservation.getId());
-        assertEquals("Edwin", reservation.getName());
-        assertTrue("the name is not valid.", isValidName(reservation.getName()));
-        assertThat(reservation.getName(), Matchers.equalToIgnoringCase("edwin"));
-        assertThat(reservation.getName(), new BaseMatcher<String>() {
+        assertEquals("1", reservation.id());
+        assertEquals("Edwin", reservation.name());
+        assertTrue("the name is not valid.", isValidName(reservation.name()));
+        assertThat(reservation.name(), Matchers.equalToIgnoringCase("edwin"));
+        assertThat(reservation.name(), new BaseMatcher<String>() {
 
             @Override
             public boolean matches(Object o) {

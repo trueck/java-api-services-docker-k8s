@@ -6,10 +6,10 @@ import com.example.review.persistence.ReviewEntity;
 import com.example.review.persistence.ReviewRepository;
 import com.example.util.exceptions.InvalidInputException;
 import com.example.util.http.ServiceUtil;
+import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -17,10 +17,12 @@ import reactor.core.scheduler.Scheduler;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static java.util.logging.Level.FINE;
 
 @RestController
+@RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceImpl.class);
@@ -33,27 +35,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final Scheduler scheduler;
 
-    @Autowired
-    public ReviewServiceImpl(Scheduler scheduler, ReviewRepository repository, ReviewMapper mapper, ServiceUtil serviceUtil) {
-        this.scheduler = scheduler;
-        this.repository = repository;
-        this.mapper = mapper;
-        this.serviceUtil = serviceUtil;
-    }
-
     @Override
     public Review createReview(Review body) {
-        if (body.getProductId() < 1) throw new InvalidInputException("Invalid productId: " + body.getProductId());
+        if (body.productId() < 1) throw new InvalidInputException("Invalid productId: " + body.productId());
 
         try {
             ReviewEntity entity = mapper.apiToEntity(body);
             ReviewEntity newEntity = repository.save(entity);
 
-            LOG.debug("createReview: created a review entity: {}/{}", body.getProductId(), body.getReviewId());
+            LOG.debug("createReview: created a review entity: {}/{}", body.productId(), body.reviewId());
             return mapper.entityToApi(newEntity);
 
         } catch (DataIntegrityViolationException dive) {
-            throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId() + ", Review Id:" + body.getReviewId());
+            throw new InvalidInputException("Duplicate key, Product Id: " + body.productId() + ", Review Id:" + body.reviewId());
         }
     }
 
@@ -61,11 +55,13 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<ReviewEntity> entityList = repository.findByProductId(productId);
         List<Review> list = mapper.entityListToApiList(entityList);
-        list.forEach(e -> e.setServiceAddress(serviceUtil.getServiceAddress()));
+        List<Review> result = list.stream().map(e ->
+            new Review(e.productId(), e.reviewId(), e.author(), e.subject(), e.content(),serviceUtil.getServiceAddress())
+        ).collect(Collectors.toList());
 
-        LOG.debug("getReviews: response size: {}", list.size());
+        LOG.debug("getReviews: response size: {}", result.size());
 
-        return list;
+        return result;
     }
 
     @Override

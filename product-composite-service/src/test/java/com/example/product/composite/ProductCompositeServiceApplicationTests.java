@@ -105,8 +105,8 @@ public class ProductCompositeServiceApplicationTests {
 
 		postAndVerifyProduct(compositeProduct, OK);
 
-		deleteAndVerifyProduct(compositeProduct.getProductId(), OK);
-		deleteAndVerifyProduct(compositeProduct.getProductId(), OK);
+		deleteAndVerifyProduct(compositeProduct.productId(), OK);
+		deleteAndVerifyProduct(compositeProduct.productId(), OK);
 	}
 
 	@Test
