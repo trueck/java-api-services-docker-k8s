@@ -2,4 +2,4 @@
 
 #docker build -t product-service ./product-service
 
-docker-compose build
+docker compose build
