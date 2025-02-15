@@ -2,4 +2,4 @@
 
 #docker rm -f product-service
 
-docker-compose down
+docker compose down
